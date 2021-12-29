@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="wsapi_writer" />
+		<Option pch_mode="2" />
+		<Option compiler="msvc" />
+		<Build>
+			<Target title="MSVC_Debug">
+				<Option output=".cmp/msvc/bin/Debug/wsapi_writerd" prefix_auto="0" extension_auto="1" />
+				<Option object_output=".cmp/msvc/obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="msvc" />
+				<Option projectCompilerOptionsRelation="-1" />
+				<Option projectLinkerOptionsRelation="-1" />
+				<Option projectIncludeDirsRelation="-1" />
+				<Option projectLibDirsRelation="-1" />
+				<Compiler>
+					<Add directory="./" />
+				</Compiler>
+				<MakeCommands>
+					<Build command="" />
+					<CompileFile command="" />
+					<Clean command="" />
+					<DistClean command="" />
+					<AskRebuildNeeded command="" />
+					<SilentBuild command=" &gt; $(CMD_NULL)" />
+				</MakeCommands>
+			</Target>
+			<Target title="MSVC_Release">
+				<Option output=".cmp/msvc/bin/Release/wsapi_writer" prefix_auto="0" extension_auto="1" />
+				<Option object_output=".cmp/msvc/obj/Release/" />
+				<Option type="1" />
+				<Option compiler="msvc" />
+				<Compiler>
+					<Add option="/MD" />
+					<Add option="/Ox" />
+					<Add option="/GF" />
+					<Add option="/EHsc" />
+					<Add option="/W3" />
+					<Add option="`$(CPDE_USR)\bin\wx-config.exe --prefix=$(#wx) --wxcfg=$(#wx.release) --cxxflags`" />
+					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
+					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
+					<Add option="/D_CRT_SECURE_DEPRECATE" />
+					<Add directory="./" />
+				</Compiler>
+				<Linker>
+					<Add option="`$(CPDE_USR)\bin\wx-config.exe  --prefix=$(#wx) --wxcfg=$(#wx.release) --libs`" />
+					<Add option="/NODEFAULTLIB:libcmtd.lib" />
+					<Add option="/NODEFAULTLIB:msvcrtd.lib" />
+					<Add option="/INCREMENTAL:NO" />
+					<Add library="msvcrt.lib" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="$(CPDE_USR)/bin/cpde_usr -bin -xi -project=$(PROJECT_NAME)  -root=$(PROJECT_DIR)  -build=$(TARGET_NAME)  -target=$(TARGET_OUTPUT_FILE)  -usr=$(CPDE_USR)" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="GCC_Debug">
+				<Option output=".cmp/gcc/bin/Debug/wsapi_writerd" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".cmp/gcc/obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc_generic" />
+				<Compiler>
+					<Add option="-std=c++17" />
+					<Add option="-W" />
+					<Add option="-fPIC" />
+					<Add option="-fexceptions" />
+					<Add option="-g" />
+					<Add option="-DNOPCH" />
+					<Add option="-D_DEBUG" />
+					<Add directory="./" />
+				</Compiler>
+				<Linker>
+					<Add library="wsapid" />
+					<Add library="op_lited" />
+					<Add library="pthread" />
+				</Linker>
+			</Target>
+			<Target title="GCC_Release">
+				<Option output=".cmp/gcc/bin/Release/wsapi_writer" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".cmp/gcc/obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc_generic" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-std=c++17" />
+					<Add option="-Os" />
+					<Add option="-fPIC" />
+					<Add option="-W" />
+					<Add option="-fexceptions" />
+					<Add option="-DNOPCH" />
+					<Add directory="./" />
+				</Compiler>
+				<Linker>
+					<Add library="wsapi" />
+					<Add library="op_lite" />
+					<Add library="pthread" />
+				</Linker>
+				<ExtraCommands>
+					<Add before="rm -f $(TARGET_OUTPUT_FILE)" />
+					<Add after="$(CPDE_USR)/bin/cpde_usr -bin -xi -project=$(PROJECT_NAME)  -root=$(PROJECT_DIR)  -build=$(TARGET_NAME)  -target=$(TARGET_OUTPUT_FILE)  -usr=$(CPDE_USR)" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add directory="$(CPDE_USR)/include" />
+			<Add directory="$(#boost.include)" />
+			<Add directory="$(#msgpack.include)" />
+		</Compiler>
+		<Linker>
+			<Add directory="$(CPDE_USR)/lib" />
+			<Add directory="$(#boost.lib)" />
+		</Linker>
+		<Unit filename="main.cpp" />
+		<Unit filename="ws_consumer.cpp" />
+		<Unit filename="ws_consumer.h" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
