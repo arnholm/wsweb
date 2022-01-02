@@ -30,6 +30,7 @@ public:
 
 private:
    std::shared_ptr<ws_db> m_db;
+   int m_ndays;
 };
 
 #endif // WSDB_H
