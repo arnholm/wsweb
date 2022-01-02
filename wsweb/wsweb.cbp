@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="wsweb" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc_generic" />
+		<Build>
+			<Target title="GCC_Debug">
+				<Option output=".cmp/gcc/bin/Debug/wswebd" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".cmp/gcc/obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc_generic" />
+				<Compiler>
+					<Add option="-std=c++17" />
+					<Add option="-W" />
+					<Add option="-fPIC" />
+					<Add option="-fexceptions" />
+					<Add option="-g" />
+					<Add option="-DNOPCH" />
+					<Add option="-D_DEBUG" />
+					<Add directory="./" />
+				</Compiler>
+				<Linker>
+					<Add library="pthread" />
+					<Add library="dotenv_all" />
+					<Add library="wsapid" />
+				</Linker>
+			</Target>
+			<Target title="GCC_Release">
+				<Option output=".cmp/gcc/bin/Release/wsweb" prefix_auto="1" extension_auto="1" />
+				<Option object_output=".cmp/gcc/obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc_generic" />
+				<Option projectLinkerOptionsRelation="2" />
+				<Compiler>
+					<Add option="-std=c++17" />
+					<Add option="-W" />
+					<Add option="-fPIC" />
+					<Add option="-fexceptions" />
+					<Add option="-Os" />
+					<Add option="`$(#wx.config) --cxxflags`" />
+					<Add option="-DNOPCH" />
+					<Add directory="./" />
+				</Compiler>
+				<Linker>
+					<Add library="pthread" />
+					<Add library="dotenv_all" />
+					<Add library="wsapi" />
+				</Linker>
+				<ExtraCommands>
+					<Add before="rm -f $(TARGET_OUTPUT_FILE)" />
+					<Add after="$(CPDE_USR)/bin/cpde_usr -bin -xi -project=$(PROJECT_NAME)  -root=$(PROJECT_DIR)  -build=$(TARGET_NAME)  -target=$(TARGET_OUTPUT_FILE)  -usr=$(CPDE_USR)" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add directory="$(CPDE_USR)/include" />
+			<Add directory="$(#boost.include)" />
+			<Add directory="$(#crow.include)" />
+			<Add directory="$(#dotenv.include)" />
+		</Compiler>
+		<Linker>
+			<Add directory="$(CPDE_USR)/lib" />
+			<Add directory="$(#boost.lib)" />
+			<Add directory="$(#dotenv.lib)" />
+		</Linker>
+		<Unit filename="main.cpp" />
+		<Unit filename="multipart_params.h" />
+		<Unit filename="templates/index.html" />
+		<Unit filename="wsapi.env" />
+		<Unit filename="wsapi_server.cpp" />
+		<Unit filename="wsapi_server.h" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

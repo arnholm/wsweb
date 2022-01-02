@@ -8,5 +8,8 @@
 		<Project filename="wsapi_py/wsapi_py.cbp">
 			<Depends filename="wsapi/wsapi.cbp" />
 		</Project>
+		<Project filename="wsweb/wsweb.cbp">
+			<Depends filename="wsapi/wsapi.cbp" />
+		</Project>
 	</Workspace>
 </CodeBlocks_workspace_file>
