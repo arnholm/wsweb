@@ -1,7 +1,17 @@
 #include "ws_data.h"
 
 ws_data::ws_data()
-{}
+{
+   m_sensors["itemp"] = &ws_data::itemp;
+   m_sensors["ihumi"] = &ws_data::ihumi;
+   m_sensors["otemp"] = &ws_data::otemp;
+   m_sensors["ohumi"] = &ws_data::ohumi;
+   m_sensors["opres"] = &ws_data::opres;
+   m_sensors["owspd"] = &ws_data::owspd;
+   m_sensors["owgus"] = &ws_data::owgus;
+   m_sensors["owdir"] = &ws_data::owdir;
+   m_sensors["orain"] = &ws_data::orain;
+}
 
 ws_data::~ws_data()
 {}
@@ -36,3 +46,30 @@ void ws_data::push_back(const sqlWeatherStation::sample& s)
    }
 }
 
+const std::vector<double>& ws_data::sensor(const std::string& name)
+{
+   static std::vector<double> dummy;
+
+   auto it = m_sensors.find(name);
+   if(it == m_sensors.end()) return dummy;
+
+   // call the relevant member function
+   sensor_name sens = it->second;
+   return (this->*sens)();
+}
+
+std::map<std::string,std::string> ws_data::sensor_map()
+{
+   return
+   {
+      {"itemp","indoor temperature [C]" }
+     ,{"otemp","outdoor temperature [C]" }
+     ,{"ihumi","indoor humidity [%]" }
+     ,{"ohumi","outdoor humidity [%]" }
+     ,{"opres","pressure [hPa]" }
+     ,{"owspd","wind speed [m s]" }
+     ,{"owgus","wind gust [m s]" }
+     ,{"owdir","wind direction [deg]" }
+     ,{"orain","accumulated rain [mm]" }
+   };
+}
