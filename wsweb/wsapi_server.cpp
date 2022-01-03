@@ -15,7 +15,6 @@
 */
 
 #include <dotenv.h>
-using namespace dotenv;
 
 #include "wsapi/ws_data.h"
 
@@ -33,10 +32,10 @@ wsapi_server::wsapi_server(const std::string& env_name)
 , m_selected_sensor("otemp")
 {
    if(m_self) throw std::runtime_error("Canot instantiate more than one wsapi_server object");
-   env.load_dotenv(m_env_name,true);
+   dotenv::init(m_env_name.c_str());
 
-   std::string db_path = env["WSAPI_DB"];
-   double elevation    = std::stod(env["WSAPI_ELEVATION"]);
+   std::string db_path = dotenv::getenv("WSAPI_DB");
+   double elevation    = std::stod(dotenv::getenv("WSAPI_ELEVATION"));
 
    bool create_if_missing = false;
    m_db = std::make_shared<ws_db>(db_path,create_if_missing);
@@ -53,7 +52,7 @@ wsapi_server::~wsapi_server()
 
 std::string wsapi_server::getenv(const std::string& key)
 {
-   return env[key];
+   return dotenv::getenv(key.c_str());
 }
 
 std::shared_ptr<ws_data> wsapi_server::query(int ndays, double min_tdiff)
