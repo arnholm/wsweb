@@ -1,6 +1,6 @@
 #include "ws_db.h"
 #include <stdexcept>
-#include "wsapi/ws_register_persistent_types.h"
+#include "ws_register_persistent_types.h"
 
 #include "op_lite/op_manager.h"
 #include "op_lite/op_database.h"
