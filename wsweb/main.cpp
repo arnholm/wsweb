@@ -21,7 +21,7 @@
 
 // CROW_MAIN is required in the main application file
 #define CROW_MAIN
-#include <crow.h>
+#include <crow_all.h>
 
 #include "wsapi_server.h"
 #include "multipart_params.h"
@@ -31,25 +31,45 @@ std::string update_page()
 {
    auto* wsapi = wsapi_server::singleton();
 
-   std::string selected_sensor = wsapi->selected_sensor();
-   int ndays                   = wsapi->selected_ndays();
+   std::string selected_sensor =  wsapi->selected_sensor();
+   int ndays                    = wsapi->selected_ndays();
 
-   std::shared_ptr<ws_data>  data = wsapi->query(ndays);
-
-   std::vector<time_t> x = data->tstmp();
-   std::vector<double> y = data->sensor(selected_sensor);
+   std::shared_ptr<ws_data> data = wsapi->query(ndays);
+   const std::vector<time_t>&  x = data->tstmp();
+   const std::vector<double>&  y = data->sensor(selected_sensor);
 
    // return data to the page, using mustache
    auto page = crow::mustache::load("index.html");
    crow::mustache::context ctx;
-   ctx["title"]           = wsapi->getenv("WSAPI_NAME") + " ("+wsapi->getenv("WSAPI_ELEVATION")+"m)";
-   ctx["sensors"]         = wsapi->sensors();
-   ctx["sensors_text"]    = wsapi->sensors_text();
-   ctx["selected_sensor"] = selected_sensor;
-   ctx["ndays"]           = ndays;
-   ctx["xpoints"]         =  x;
-   ctx["ypoints"]         =  y;
-   ctx["yaxis"]           =  ws_data::sensor_map()[selected_sensor];
+
+   // Create list of time,value data for the chart plot
+   size_t list_length = x.size() > y.size() ? y.size() : x.size();
+   std::vector<crow::mustache::context> list;
+   for (size_t i = 0; i < list_length; i++)
+   {
+      crow::mustache::context item;
+      item["time"]  = x[i];
+      item["value"] = y[i];
+      list.emplace_back(item);
+   }
+   ctx["chart_list"] = std::move(list);
+
+   // Create list of sensor name,description as well as selected
+   auto sensor_map = ws_data::sensor_map();
+   std::vector<crow::mustache::context> sensor_list;
+   for (auto& sensor : sensor_map)
+   {
+       crow::mustache::context item;
+       item["name"] = sensor.first;
+       item["desc"] = sensor.second;
+       item["selected"] = sensor.first == selected_sensor;
+       sensor_list.emplace_back(item);
+   }
+   ctx["sensor_list"] = std::move(sensor_list);
+
+   ctx["title"] = wsapi->getenv("WSAPI_NAME") + " ("+wsapi->getenv("WSAPI_ELEVATION")+"m)";
+   ctx["ndays"] = ndays;
+   ctx["yaxis"] = ws_data::sensor_map()[selected_sensor];
 
    // render the page using mustache context
    return page.render(ctx);
@@ -60,7 +80,7 @@ int main(int argc, char **argv)
    wsapi_server wsapi;
    crow::SimpleApp app;
 
-   CROW_ROUTE(app, "/")([]() { return update_page(); });
+   CROW_ROUTE(app, "/")([]() { return crow::response(200, "html", update_page()); });
 
    CROW_ROUTE(app, "/submit")
   .methods("GET"_method, "POST"_method)([](const crow::request& req) {
@@ -78,11 +98,11 @@ int main(int argc, char **argv)
       wsapi->set_selected_sensor(sensor);
 
       // update page with new graph
-      return update_page();
+       return crow::response(200, "html", update_page());
    });
 
    //set the port, set the app to run on multiple threads, and run the app
-   app.port(18080).multithreaded().run();
+   app.port(18080).run();
 
    return 0;
 }
