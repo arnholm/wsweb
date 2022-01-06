@@ -2,7 +2,7 @@
 //
 // Google Charts  : Javascript web charts          : https://developers.google.com/chart
 // Crow           : C++ web microframework         : https://crowcpp.org/ ,  https://github.com/CrowCpp/Crow
-// cpp-dotenv     : C++ .env parser                : https://github.com/adeharo9/cpp-dotenv
+// cpp-dotenv     : C++ .env parser                : https://github.com/arnholm/dotenv-cpp (based on https://github.com/laserpants/dotenv-cpp )
 // op_lite        : C++ object oriented database   : https://github.com/arnholm/cpde_syslibs/tree/master/op_lite
 //
 
