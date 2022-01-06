@@ -21,7 +21,7 @@
 
 // CROW_MAIN is required in the main application file
 #define CROW_MAIN
-#include <crow_all.h>
+#include <crow.h>
 
 #include "wsapi_server.h"
 #include "multipart_params.h"
