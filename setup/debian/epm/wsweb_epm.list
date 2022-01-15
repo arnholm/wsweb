@@ -1,0 +1,24 @@
+$instdir=/usr/local/
+$bindir=${instdir}/bin
+$libdir=${instdir}/lib
+%product wsweb
+%copyright 2022 Carsten Arnholm.
+%vendor Carsten Arnholm
+%description wsweb is experimental web applicarion for 
+%description weather station data
+%description General Public License version 2 or 3 (at your option)
+%description as published by the Free Software Foundation.
+%description wsweb is provided "AS IS" with NO WARRANTY OF ANY KIND,
+%description INCLUDING THE WARRANTIES OF DESIGN, MERCHANTABILITY 
+%description AND FITNESS FOR A PARTICULAR PURPOSE.
+%version 1.0
+%readme README.txt
+%license LICENSE.txt
+%requires libpthread-stubs0-dev
+%postinstall ldconfig
+
+f 755 root sys ${bindir}/wsweb ${CPDE_USR}/bin/wsweb 
+f 755 root sys ${bindir}/wsapi_writer ${CPDE_USR}/bin/wsapi_writer 
+f 755 root sys ${libdir}/libwsapi.so ${CPDE_USR}/bin/libwsapi.so
+f 755 root sys ${libdir}/libop_lite.so ${CPDE_USR}/bin/libop_lite.so
+
