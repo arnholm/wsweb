@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
 	<Workspace title="WSWEB">
-		<Project filename="wsapi/wsapi.cbp" />
+		<Project filename="txt2h/txt2h.cbp" />
+		<Project filename="wsapi/wsapi.cbp">
+			<Depends filename="txt2h/txt2h.cbp" />
+		</Project>
 		<Project filename="wsapi_writer/wsapi_writer.cbp">
 			<Depends filename="wsapi/wsapi.cbp" />
 		</Project>
