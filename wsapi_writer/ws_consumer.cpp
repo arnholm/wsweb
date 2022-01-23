@@ -11,15 +11,13 @@
 
 ws_consumer::ws_consumer(const std::string& db_path)
 : m_db_path(db_path)
-, m_db(nullptr)
 {
    ws_register_persistent_types();
-   m_db = op_mgr()->open_database(m_db_path,m_db_path);
 }
 
 ws_consumer::~ws_consumer()
 {
-  m_db = op_mgr()->close_database(m_db_path,false);
+   op_mgr()->close_database(m_db_path,false);
 }
 
 void ws_consumer::consume(const unsigned char* data, size_t bytes_transferred)
@@ -34,8 +32,10 @@ void ws_consumer::consume(const unsigned char* data, size_t bytes_transferred)
 
          if(m_samples.size() > 0) {
 
+            op_database* db = op_mgr()->open_database(m_db_path,m_db_path);
+
             // we have something to write, create write-transaction
-            op_transaction trans(m_db,false);
+            op_transaction trans(db,false);
 
             while(m_samples.size() > 0) {
 
@@ -44,11 +44,11 @@ void ws_consumer::consume(const unsigned char* data, size_t bytes_transferred)
 
                // Write only if it does not already exists
                list<op_pid> ids;
-               m_db->select_ids(ids,op_typeid<sqlWeatherStation>(),sqlWeatherStation::time_clause(first_sample->tstmp));
+               db->select_ids(ids,op_typeid<sqlWeatherStation>(),sqlWeatherStation::time_clause(first_sample->tstmp));
                if(ids.size() == 0) {
 
                   // not found, so we write
-                  sqlWeatherStation* obj = op_new_db<sqlWeatherStation>(m_db,*first_sample);
+                  sqlWeatherStation* obj = op_new_db<sqlWeatherStation>(db,*first_sample);
 
                   // format the time, use gmtime always
                   const size_t buflen = 32;
@@ -60,6 +60,8 @@ void ws_consumer::consume(const unsigned char* data, size_t bytes_transferred)
                // ok, we managed to write it, so remove from in-core list
                m_samples.erase(first_sample);
             }
+
+            db = op_mgr()->close_database(m_db_path,false);
          }
 
          // if we get to this point, we should normally have no pending samples

@@ -19,7 +19,6 @@ public:
 
 private:
    std::string  m_db_path;
-   op_database* m_db;
    std::list<sqlWeatherStation::sample> m_samples;
 };
 
