@@ -5,15 +5,12 @@
 #include <udpsimple/udp_receiver.h>
 #include "ws_consumer.h"
 
+#include <dotenv.h>
+
 int main(int argc, char **argv)
 {
-   if(argc < 2) {
-      std::cout << "Insufficient arguments provided" << std::endl;
-      std::cout << "Usage: wsapi_writer  <database_filename>" << std::endl;
-      return 1;
-   }
-
-   std::string db_path = argv[1];
+   dotenv::init("wsapi.env");
+   std::string db_path = dotenv::getenv("WSAPI_DB");
    if(!std::filesystem::exists(db_path)) {
       std::cout << "database file does not exist: "<<  db_path << std::endl;
       return 1;

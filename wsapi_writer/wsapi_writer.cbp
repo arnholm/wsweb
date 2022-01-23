@@ -108,6 +108,7 @@
 			<Add directory="$(CPDE_USR)/include" />
 			<Add directory="$(#boost.include)" />
 			<Add directory="$(#msgpack.include)" />
+   			<Add directory="$(#dotenv.include)" />
 		</Compiler>
 		<Linker>
 			<Add directory="$(CPDE_USR)/lib" />
