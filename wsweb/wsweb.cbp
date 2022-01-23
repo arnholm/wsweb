@@ -102,6 +102,7 @@
 				</Linker>
 				<ExtraCommands>
 					<Add before="rm -f $(TARGET_OUTPUT_FILE)" />
+					<Add before="$(CPDE_USR)/bin/txt2h ./templates/index.html" />
 					<Add after="$(CPDE_USR)/bin/cpde_usr -bin -xi -project=$(PROJECT_NAME)  -root=$(PROJECT_DIR)  -build=$(TARGET_NAME)  -target=$(TARGET_OUTPUT_FILE)  -usr=$(CPDE_USR)" />
 					<Mode after="always" />
 				</ExtraCommands>

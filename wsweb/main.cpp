@@ -25,6 +25,7 @@
 
 #include "wsapi_server.h"
 #include "multipart_params.h"
+#include "templates/index.h"
 
 // update page returns data for the next HTML page reload
 std::string update_page()
@@ -39,7 +40,8 @@ std::string update_page()
    const std::vector<double>&  y = data->sensor(selected_sensor);
 
    // return data to the page, using mustache
-   auto page = crow::mustache::load("index.html");
+// auto page = crow::mustache::load("index.html");
+   auto page = crow::mustache::compile(index_html);
    crow::mustache::context ctx;
 
    // Create list of time,value data for the chart plot

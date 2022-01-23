@@ -10,6 +10,7 @@
 		</Project>
 		<Project filename="wsweb/wsweb.cbp">
 			<Depends filename="wsapi/wsapi.cbp" />
+			<Depends filename="wsapi_writer/wsapi_writer.cbp" />
 		</Project>
 	</Workspace>
 </CodeBlocks_workspace_file>
