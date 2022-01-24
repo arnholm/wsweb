@@ -4,7 +4,8 @@
 #include <string>
 #include <filesystem>
 
-// compile the context of a text file into a C++ std::string (hex code)
+// compile the contents of a text file into a
+// C++ const std::string (hex code) in a header file
 int main (int argc, char **argv)
 {
    if(argc < 2) {
@@ -31,8 +32,8 @@ int main (int argc, char **argv)
       std::cout << "Error: could not open for read: " << path_in << std::endl;
       return 1;
    }
-   // get the time stamps of input and output files
-   // if output file does not exist, it is marked as older than input file, thus out of date
+   // get the time stamps of input and output files. If output file does not exist,
+   // it is marked as older than input file, thus "out of date"
    auto time_in  = std::filesystem::last_write_time(path_in);
    auto time_out = time_in - std::chrono::seconds{1};
    if(std::filesystem::exists(path_out)) time_out = std::filesystem::last_write_time(path_out);
@@ -46,10 +47,10 @@ int main (int argc, char **argv)
          return 1;
       }
 
-      // read all data from input file
+      // read all data from input file, byte by byte
       std::string file_data {std::istreambuf_iterator<char>(in), std::istreambuf_iterator<char>()};
 
-      // construct variable name: e.g. filename 'index.html' becomes 'index_html'
+      // construct a variable name: e.g. filename 'index.html' becomes 'index_html'
       std::string var_name = path_in.stem().string() + '_' + path_in.extension().string().substr(1);
 
       // write as array of hex data
@@ -67,7 +68,7 @@ int main (int argc, char **argv)
          else     out <<", ";
 
          // write as hex
-         out << std::hex << "0x"<<(int)file_data[i];
+         out  << "0x" << std::hex <<(int)file_data[i];
          counter++;
       }
       out << " };";

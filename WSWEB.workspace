@@ -12,6 +12,7 @@
 			<Depends filename="wsapi/wsapi.cbp" />
 		</Project>
 		<Project filename="wsweb/wsweb.cbp">
+			<Depends filename="txt2h/txt2h.cbp" />
 			<Depends filename="wsapi/wsapi.cbp" />
 			<Depends filename="wsapi_writer/wsapi_writer.cbp" />
 		</Project>
