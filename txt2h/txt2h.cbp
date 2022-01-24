@@ -13,12 +13,13 @@
 				<Option compiler="msvc" />
 				<Compiler>
 					<Add option="/MDd" />
+					<Add option="/GF" />
 					<Add option="/Od" />
+					<Add option="/W3" />
 					<Add option="/RTCsu" />
 					<Add option="/Fd$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).pdb" />
-					<Add option="/GF" />
 					<Add option="/EHsc" />
-					<Add option="/W3" />
+					<Add option="/std:c++17" />
 					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
 					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
 					<Add option="/D_CRT_SECURE_DEPRECATE" />
@@ -37,10 +38,11 @@
 				<Option compiler="msvc" />
 				<Compiler>
 					<Add option="/MD" />
-					<Add option="/Ox" />
 					<Add option="/GF" />
-					<Add option="/EHsc" />
+					<Add option="/Ox" />
 					<Add option="/W3" />
+					<Add option="/EHsc" />
+					<Add option="/std:c++17" />
 					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
 					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
 					<Add option="/D_CRT_SECURE_DEPRECATE" />
@@ -71,8 +73,6 @@
 					<Add option="-DNOPCH" />
 					<Add option="-D_DEBUG" />
 				</Compiler>
-				<Linker>
-				</Linker>
 			</Target>
 			<Target title="GCC_Release">
 				<Option output=".cmp/gcc/bin/Release/txt2h" prefix_auto="1" extension_auto="1" />
@@ -88,8 +88,6 @@
 					<Add option="-Os" />
 					<Add option="-DNOPCH" />
 				</Compiler>
-				<Linker>
-				</Linker>
 				<ExtraCommands>
 					<Add before="rm -f $(TARGET_OUTPUT_FILE)" />
 					<Add after="$(CPDE_USR)/bin/cpde_usr -bin -xi -project=$(PROJECT_NAME)  -root=$(PROJECT_DIR)  -build=$(TARGET_NAME)  -target=$(TARGET_OUTPUT_FILE)  -usr=$(CPDE_USR)" />
