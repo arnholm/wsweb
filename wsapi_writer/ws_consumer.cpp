@@ -23,6 +23,7 @@ ws_consumer::~ws_consumer()
 void ws_consumer::consume(const unsigned char* data, size_t bytes_transferred)
 {
    if(bytes_transferred > 0) {
+
       try {
          auto p = sqlWeatherStation::parse_udp(std::string(data,data+bytes_transferred));
          if(p.second) {
@@ -32,38 +33,38 @@ void ws_consumer::consume(const unsigned char* data, size_t bytes_transferred)
 
          if(m_samples.size() > 0) {
 
-            op_database* db = op_mgr()->open_database(m_db_path,m_db_path);
+            if(op_database* db = op_mgr()->open_database(m_db_path,m_db_path)) {
 
-            // we have something to write, create write-transaction
-            op_transaction trans(db,false);
+               {  // we have something to write, create write-transaction scope
+                  op_transaction trans(db,false);
+                  while(m_samples.size() > 0) {
 
-            while(m_samples.size() > 0) {
+                     // oldest sample
+                     auto first_sample = m_samples.begin();
 
-               // oldest sample
-               auto first_sample = m_samples.begin();
+                     // Write only if it does not already exists
+                     list<op_pid> ids;
+                     db->select_ids(ids,op_typeid<sqlWeatherStation>(),sqlWeatherStation::time_clause(first_sample->tstmp));
+                     if(ids.size() == 0) {
 
-               // Write only if it does not already exists
-               list<op_pid> ids;
-               db->select_ids(ids,op_typeid<sqlWeatherStation>(),sqlWeatherStation::time_clause(first_sample->tstmp));
-               if(ids.size() == 0) {
+                        // not found, so we write
+                        sqlWeatherStation* obj  = op_new_db<sqlWeatherStation>(db,*first_sample);
 
-                  // not found, so we write
-                  sqlWeatherStation* obj = op_new_db<sqlWeatherStation>(db,*first_sample);
+                        // format the time, use gmtime always
+                        const size_t buflen = 32;
+                        char time_buf[buflen];
+                        strftime(time_buf,buflen,"%Y%m%d %H:%M:%S UTC",gmtime(&(first_sample->tstmp)));
+                        std::cout << "OK: "<<time_buf<< " : "<< std::string(data,data+bytes_transferred) << std::endl;
+                     }
 
-                  // format the time, use gmtime always
-                  const size_t buflen = 32;
-                  char time_buf[buflen];
-                  strftime(time_buf,buflen,"%Y%m%d %H:%M:%S UTC",gmtime(&(first_sample->tstmp)));
-                  std::cout << "OK: "<<time_buf<< " : "<< std::string(data,data+bytes_transferred) << std::endl;
+                     // ok, we managed to write it, so remove from in-core list
+                     m_samples.erase(first_sample);
+                  }
                }
 
-               // ok, we managed to write it, so remove from in-core list
-               m_samples.erase(first_sample);
+               op_mgr()->close_database(m_db_path,false);
             }
-
-            db = op_mgr()->close_database(m_db_path,false);
          }
-
          // if we get to this point, we should normally have no pending samples
          if(m_samples.size() > 0) std::cout << "Warning: Samples pending=" << m_samples.size() << std::endl;
          return;

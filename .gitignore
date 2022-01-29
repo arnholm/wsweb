@@ -3,3 +3,5 @@
 *.pdb
 .cmp
 __pycache__
+*.zip
+*.deb
