@@ -19,6 +19,7 @@
 					<Add option="/RTCsu" />
 					<Add option="/Fd$(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).pdb" />
 					<Add option="/EHsc" />
+					<Add option="/std:c++17" />
 					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
 					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
 					<Add option="/D_CRT_SECURE_DEPRECATE" />
@@ -43,6 +44,7 @@
 					<Add option="/Ox" />
 					<Add option="/W3" />
 					<Add option="/EHsc" />
+					<Add option="/std:c++17" />
 					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
 					<Add option="/D_CRT_NONSTDC_NO_DEPRECATE" />
 					<Add option="/D_CRT_SECURE_DEPRECATE" />

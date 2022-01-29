@@ -30,7 +30,7 @@
 					<Add option="/INCREMENTAL:NO" />
 					<Add library="msvcrtd.lib" />
 					<Add library="op_lited" />
-					<Add library="wsapid" />					
+					<Add library="wsapid" />
 				</Linker>
 			</Target>
 			<Target title="MSVC_Release">
@@ -40,9 +40,9 @@
 				<Option compiler="msvc" />
 				<Compiler>
 					<Add option="/MD" />
+					<Add option="/GF" />
 					<Add option="/Ox" />
 					<Add option="/W3" />
-					<Add option="/GF" />
 					<Add option="/EHsc" />
 					<Add option="/std:c++17" />
 					<Add option="/D_CRT_SECURE_NO_WARNINGS" />
