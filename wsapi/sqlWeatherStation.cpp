@@ -225,13 +225,15 @@ std::shared_ptr<ws_data> sqlWeatherStation::get_data(op_database* db, time_t t_b
    db->select_ids(ids,op_typeid<sqlWeatherStation>(),time_clause(t_beg,t_end));
    data->reserve(ids.size());
    time_t prev_t = 0;
+   size_t icount=0;
    for(auto& id : ids) {
       op_ptr<sqlWeatherStation> ws(id);
+      icount++;
       if(ws->is_valid()) {
          time_t this_t = ws->time_utc();
          if(min_tdiff > 0.0) {
             double tdiff = difftime(this_t, prev_t);
-            if(tdiff >= min_tdiff) {
+            if(tdiff >= min_tdiff || icount==ids.size()) {
                data->push_back(ws->get_sample(elevation));
                prev_t = this_t;
             }
