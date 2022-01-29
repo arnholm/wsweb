@@ -27,9 +27,8 @@ wsapi_server* wsapi_server::singleton()
 
 wsapi_server::wsapi_server(const std::string& env_name)
 : m_env_name(env_name)
-, m_ndays(7)
-, m_selected_ndays(7)
-, m_selected_sensor("otemp")
+, m_default_ndays(7)
+, m_default_sensor("otemp")
 {
    if(m_self) throw std::runtime_error("Canot instantiate more than one wsapi_server object");
    dotenv::init(m_env_name.c_str());
@@ -40,7 +39,6 @@ wsapi_server::wsapi_server(const std::string& env_name)
    bool create_if_missing = false;
    m_db = std::make_shared<ws_db>(db_path,create_if_missing);
    m_db->set_elevation(elevation);
-   m_data = m_db->get_data_days(m_ndays);
 
    m_self = this;
 }
@@ -57,11 +55,7 @@ std::string wsapi_server::getenv(const std::string& key)
 
 std::shared_ptr<ws_data> wsapi_server::query(int ndays, double min_tdiff)
 {
-   if(ndays != m_ndays) {
-      m_data = m_db->get_data_days(ndays,min_tdiff);
-   }
-   m_ndays = ndays;
-   return m_data;
+   return m_db->get_data_days(ndays,min_tdiff);
 }
 
 std::vector<std::string> wsapi_server::sensors() const

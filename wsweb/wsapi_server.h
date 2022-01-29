@@ -47,28 +47,20 @@ public:
    std::vector<std::string> sensors_text() const;
 
    // return currently selected sensor
-   std::string selected_sensor() const { return m_selected_sensor; }
+   std::string default_sensor() const { return m_default_sensor; }
 
    // return currently selected number of days
-   int selected_ndays() const { return m_selected_ndays; }
-
-   // set selected number of days, i.e. for next query
-   void set_selected_ndays(int ndays) { m_selected_ndays = ndays; }
-
-   // set selected sensor, i.e. for next query
-   void set_selected_sensor(const std::string& selected_sensor) { m_selected_sensor = selected_sensor; }
+   int default_ndays() const { return m_default_ndays; }
 
 private:
    std::string              m_env_name; // name of .env file read
 
    std::shared_ptr<ws_db>   m_db;       // database file
-   std::shared_ptr<ws_data> m_data;     // data containing data corresponding to m_ndays
-   int                      m_ndays;    // number of days last read from database
    static wsapi_server*     m_self;
 
 private:
-   std::string              m_selected_sensor;  // user selection of sensor
-   int                      m_selected_ndays;   // user selection of number of days
+   std::string              m_default_sensor;
+   int                      m_default_ndays;
 };
 
 #endif // wsapi_server_H

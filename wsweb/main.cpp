@@ -28,12 +28,9 @@
 #include "templates/index.h"
 
 // update page returns data for the next HTML page reload
-std::string update_page()
+std::string update_page(const std::string& selected_sensor, int ndays)
 {
    auto* wsapi = wsapi_server::singleton();
-
-   std::string selected_sensor =  wsapi->selected_sensor();
-   int ndays                    = wsapi->selected_ndays();
 
    std::shared_ptr<ws_data> data = wsapi->query(ndays);
    const std::vector<time_t>&  x = data->tstmp();
@@ -82,7 +79,11 @@ int main(int argc, char **argv)
    wsapi_server wsapi;
    crow::SimpleApp app;
 
-   CROW_ROUTE(app, "/")([]() { return crow::response(200, "html", update_page()); });
+   CROW_ROUTE(app, "/")([]()
+                        {
+                           wsapi_server* api = wsapi_server::singleton();
+                           return crow::response(200, "html", update_page(api->default_sensor(),api->default_ndays()));
+                        });
 
    CROW_ROUTE(app, "/submit")
   .methods("GET"_method, "POST"_method)([](const crow::request& req) {
@@ -94,13 +95,8 @@ int main(int argc, char **argv)
       int ndays          = form["ndays"].i();
       std::string sensor = form["sensor"];
 
-      // store the parameter values
-      auto* wsapi = wsapi_server::singleton();
-      wsapi->set_selected_ndays(ndays);
-      wsapi->set_selected_sensor(sensor);
-
       // update page with new graph
-       return crow::response(200, "html", update_page());
+      return crow::response(200, "html", update_page(sensor,ndays));
    });
 
    //set the port, set the app to run on multiple threads, and run the app
