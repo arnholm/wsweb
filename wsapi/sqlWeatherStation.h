@@ -58,7 +58,7 @@ public:
    double ihumi() const    { return m_ihumi; }
 
    double otemp() const    { return m_otemp; }
-   double ohumi() const    { return m_ohumi; }
+   double ohumi() const    { return (m_ohumi <= 100.0)? m_ohumi : 0.0; }  // 255% should be 0%
    double opres(double elevation=0.0) const;  // pressure adjusted to sea level
    double owspd() const    { return m_owspd; }
    double owgus() const    { return m_owgus; }
