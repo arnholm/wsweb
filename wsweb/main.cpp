@@ -70,6 +70,11 @@ std::string update_page(const std::string& selected_sensor, int ndays)
    ctx["ndays"] = ndays;
    ctx["yaxis"] = ws_data::sensor_map()[selected_sensor];
 
+   ctx["img_url"]    = wsapi->getenv("WSIMAGE_URL");
+   ctx["img_hdr"]    = wsapi->getenv("WSIMAGE_HDR");
+   ctx["img_astyle"] = wsapi->getenv("WSIMAGE_ASTYLE");
+   ctx["img_istyle"] = wsapi->getenv("WSIMAGE_ISTYLE");
+
    // render the page using mustache context
    return page.render(ctx);
 }
