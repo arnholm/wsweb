@@ -37,7 +37,7 @@ std::string update_page(const std::string& selected_sensor, int ndays)
    const std::vector<double>&  y = data->sensor(selected_sensor);
 
    // return data to the page, using mustache
-// auto page = crow::mustache::load("index.html");
+  // auto page = crow::mustache::load("index.html");
    auto page = crow::mustache::compile(index_html);
    crow::mustache::context ctx;
 
