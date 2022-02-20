@@ -133,8 +133,8 @@
 			<Add directory="$(CPDE_USR)/lib" />
 			<Add directory="$(#boost.lib)" />
 		</Linker>
-		<Unit filename="RunningAverage.cpp" />
-		<Unit filename="RunningAverage.h" />
+		<Unit filename="running_average.cpp" />
+		<Unit filename="running_average.h" />
 		<Unit filename="sqlWeatherStation.cpp" />
 		<Unit filename="sqlWeatherStation.h" />
 		<Unit filename="ws_data.cpp" />
