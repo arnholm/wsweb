@@ -36,6 +36,10 @@ std::string update_page(const std::string& selected_sensor, int ndays)
    const std::vector<time_t>&  x = data->tstmp();
    const std::vector<double>&  y = data->sensor(selected_sensor);
 
+   // compute 24h running average data
+   int plen = 86400;  // seconds/day
+   std::vector<ws_data::ValuePair> avg = data->running_avg(selected_sensor,plen);
+
    // return data to the page, using mustache
   // auto page = crow::mustache::load("index.html");
    auto page = crow::mustache::compile(index_html);
@@ -52,6 +56,15 @@ std::string update_page(const std::string& selected_sensor, int ndays)
       list.emplace_back(item);
    }
    ctx["chart_list"] = std::move(list);
+
+   std::vector<crow::mustache::context> running_average;
+   for(size_t i=0; i<avg.size(); i++) {
+      crow::mustache::context item;
+      item["time"]  = avg[i].first;
+      item["value"] = avg[i].second;
+      running_average.emplace_back(item);
+   }
+   ctx["running_average"] = std::move(running_average);
 
    // Create list of sensor name,description as well as selected
    auto sensor_map = ws_data::sensor_map();

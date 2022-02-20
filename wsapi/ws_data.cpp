@@ -1,4 +1,6 @@
 #include "ws_data.h"
+#include "running_average.h"
+#include  <cmath>
 
 ws_data::ws_data()
 {
@@ -72,4 +74,26 @@ std::map<std::string,std::string> ws_data::sensor_map()
      ,{"owdir","wind direction [deg]" }
      ,{"orain","accumulated rain [mm]" }
    };
+}
+
+std::vector<ws_data::ValuePair> ws_data::running_avg(const std::string& name, int plen)
+{
+   std::vector<ws_data::ValuePair> ts_avg;
+
+   const std::vector<double>& values = sensor(name);
+   running_average avg(plen);
+
+   size_t nsamp = values.size();
+   for(size_t i=0; i<nsamp; i++) {
+      time_t t = m_tstmp[i];
+      double v = values[i];
+
+      avg.push_back(std::make_pair(t,v));
+      double v_avg = avg.value();
+      if(!isnan(v_avg)) {
+         ts_avg.push_back(std::make_pair(avg.time_value(),v_avg));
+      }
+   }
+
+   return ts_avg;
 }

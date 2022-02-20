@@ -38,6 +38,10 @@ public:
    // get sensor data using one of the above sensor names, returns empty vector if wrong name
    const std::vector<double>& sensor(const std::string& name);
 
+   // compute running average time series from raw sensor data
+   typedef std::pair<time_t,double> ValuePair;
+   std::vector<ValuePair> running_avg(const std::string& name, int plen);
+
    // return map of sensor name, description
    static std::map<std::string,std::string> sensor_map();
 

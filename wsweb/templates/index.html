@@ -56,9 +56,9 @@
 
    function drawBasic()
    {
-      var data = new google.visualization.DataTable();
-      data.addColumn('datetime', 'time');
-      data.addColumn('number', 'value');
+      var data1 = new google.visualization.DataTable();
+      data1.addColumn('datetime', 'time');
+      data1.addColumn('number', 'Raw');
 
       // unpack time and value directly into a JS 2d Array
       // This seems to be faster than many .addRow() calls
@@ -66,18 +66,35 @@
       {{#chart_list}}
       xy.push([ new Date({{time}}*1000), {{value}} ]);
       {{/chart_list}}
+      data1.addRows(xy);
 
-      data.addRows(xy);
+      // unpack running average data
+      var avg = []
+      {{#running_average}}
+      avg.push([ new Date({{time}}*1000), {{value}} ]);
+      {{/running_average}}
+
+      if(avg.length > 0) {
+         // join the data tables to show both curves
+         // Note: interpolateNulls: true in options avoids gaps
+         var data2 = new google.visualization.DataTable();
+         data2.addColumn('datetime', 'time');
+         data2.addColumn('number', '24h avg');
+         data2.addRows(avg);
+         data1 = google.visualization.data.join(data1, data2, 'full', [[0, 0]], [1], [1]);
+       }
 
       var options = {
         hAxis: { title: 'Time',  format: 'yyyy-MM-dd HH:mm'    },
-        legend: { position: 'none' },
+    //    legend: { position: 'none' },
+         legend: { position: 'top' },
         chartArea: {'width': '95%'},
+        interpolateNulls: true,
         title: '{{yaxis}}'
       };
 
       var chart = new google.visualization.LineChart(document.getElementById('container'));
-      chart.draw(data, options);
+      chart.draw(data1, options);
    }
    google.charts.setOnLoadCallback(drawBasic);
 </script>
